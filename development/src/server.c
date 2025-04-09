@@ -54,6 +54,13 @@
 #include "../include/gxinvoke.h"
 #include "../include/gxserializer.h"
 
+//Arduino DOIT ESP32 uses bb_init. bb_Init is used instead.
+#ifndef ESP_PLATFORM
+#define BYTE_BUFFER_INIT bb_init
+#else
+#define BYTE_BUFFER_INIT bb_Init
+#endif //DESP_PLATFORM
+
 typedef struct
 {
     /**
@@ -1152,7 +1159,7 @@ int svr_handleSetRequestWithList(
     unsigned char ch;
     uint16_t pos, count, targetPos, tmp;
     gxByteBuffer status;
-    bb_init(&status);
+    BYTE_BUFFER_INIT(&status);
 #ifdef DLMS_IGNORE_MALLOC
     unsigned char STATUS_BUFF[20];
     bb_attach(&status, STATUS_BUFF, 0, sizeof(STATUS_BUFF));

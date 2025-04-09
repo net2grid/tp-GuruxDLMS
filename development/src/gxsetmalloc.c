@@ -51,6 +51,13 @@
 #include "../include/gxget.h"
 #include "../include/server.h"
 
+//Arduino DOIT ESP32 uses bb_init. bb_Init is used instead.
+#ifndef ESP_PLATFORM
+#define BYTE_BUFFER_INIT bb_init
+#else
+#define BYTE_BUFFER_INIT bb_Init
+#endif //DESP_PLATFORM
+
 #ifndef DLMS_IGNORE_DATA
 int cosem_setData(gxValueEventArg* e)
 {
@@ -5302,7 +5309,7 @@ int cosem_setFunctionControl(
                 {
                     break;
                 }
-                bb_init(&it->name);
+                BYTE_BUFFER_INIT(&it->name);
                 bb_set2(&it->name, tmp2->byteArr, 0, bb_size(tmp2->byteArr));
                 if ((ret = va_getByIndex(tmp->Arr, 1, &tmp2)) != DLMS_ERROR_CODE_OK)
                 {
@@ -5339,7 +5346,7 @@ int cosem_setFunctionControl(
                 {
                     break;
                 }
-                bb_init(&it->name);
+                BYTE_BUFFER_INIT(&it->name);
                 bb_set2(&it->name, tmp2->byteArr, 0, bb_size(tmp2->byteArr));
                 if ((ret = va_getByIndex(tmp->Arr, 1, &tmp2)) != DLMS_ERROR_CODE_OK)
                 {

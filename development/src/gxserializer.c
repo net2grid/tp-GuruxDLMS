@@ -44,6 +44,13 @@
 #include "../include/serverevents.h"
 #endif //DLMS_DEBUG
 
+//Arduino DOIT ESP32 uses bb_init. bb_Init is used instead.
+#ifndef ESP_PLATFORM
+#define BYTE_BUFFER_INIT bb_init
+#else
+#define BYTE_BUFFER_INIT bb_Init
+#endif //DESP_PLATFORM
+
 //Serialization version is increased every time when structure of serialized data is changed.
 #define SERIALIZATION_VERSION 1
 
@@ -907,7 +914,7 @@ int ser_loadVariant(dlmsVARIANT* data,
         case DLMS_DATA_TYPE_STRING:
 #if !defined(DLMS_IGNORE_MALLOC)
             data->byteArr = (gxByteBuffer*)gxmalloc(sizeof(gxByteBuffer));
-            bb_init(data->byteArr);
+            BYTE_BUFFER_INIT(data->byteArr);
             ret = ser_getOctetString(serializeSettings, data->byteArr);
 #else
             ret = ser_loadOctetString3(serializeSettings, (unsigned char*)data->pVal, &data->size);
@@ -916,7 +923,7 @@ int ser_loadVariant(dlmsVARIANT* data,
         case DLMS_DATA_TYPE_STRING_UTF8:
 #if !defined(DLMS_IGNORE_MALLOC)
             data->byteArr = (gxByteBuffer*)gxmalloc(sizeof(gxByteBuffer));
-            bb_init(data->byteArr);
+            BYTE_BUFFER_INIT(data->byteArr);
             ret = ser_getOctetString(serializeSettings, data->byteArr);
 #else
             ret = ser_loadOctetString3(serializeSettings, data->pVal, &data->size);
@@ -925,7 +932,7 @@ int ser_loadVariant(dlmsVARIANT* data,
         case DLMS_DATA_TYPE_OCTET_STRING:
 #if !defined(DLMS_IGNORE_MALLOC)
             data->byteArr = (gxByteBuffer*)gxmalloc(sizeof(gxByteBuffer));
-            bb_init(data->byteArr);
+            BYTE_BUFFER_INIT(data->byteArr);
             ret = ser_getOctetString(serializeSettings, data->byteArr);
 #else
             ret = ser_loadOctetString3(serializeSettings, data->pVal, &data->size);
